@@ -1,0 +1,29 @@
+blueprint:
+  name: Night lights
+  description: Turn on lights when the sun has set.
+  domain: automation
+  input:
+    lights:
+      name: Lights to control
+      selector:
+        target:
+          entity:
+            domain: light
+
+trigger:
+  - platform: sun
+    event: sunrise
+  - platform: sun
+    event: sunset
+
+action:
+  - if:
+      - condition: sun
+        before: sunrise
+        after: sunset
+    then:
+      - service: light.turn_on
+        target: !input lights
+    else:
+      - service: light.turn_off
+        target: !input lights
